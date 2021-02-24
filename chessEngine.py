@@ -22,7 +22,24 @@ class GameState():
 
         self.moveLog = []
         self.whiteToMove = True
-
     
+    def makeMove(self, move):
+        self.board[move.startRow, move.startCol] = "--" #leave behind blank space
+        self.board[move.endRow, move.endCol] = move.moved_piece #move piece to new location
+        self.moveLog.append(move) #track move
+        self.whiteToMove = not self.whiteToMove #switch players
 
+
+
+class Move(): # handles squares to execute moves and keeps track of them
+
+    # chess notation dictionary, see part 2 ca 25min
+
+    def __init__(self, start_sq, end_sq, board):
+        self.startRow = start_sq[0]
+        self.startCol = start_sq[1]
+        self.endRow = end_sq[0]
+        self.endCol = end_sq[1]
+        self.moved_piece = board[self.startRow, self.startCol]
+        self.captured_piece = board[self.endRow, self.endRow]
 
