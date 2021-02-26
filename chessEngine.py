@@ -23,11 +23,19 @@ class GameState():
         self.moveLog = []
         self.whiteToMove = True
     
+    # Will not work for casteling, en passant capture and pawn promotion
     def makeMove(self, move):
         self.board[move.startRow, move.startCol] = "--" #leave behind blank space
         self.board[move.endRow, move.endCol] = move.moved_piece #move piece to new location
         self.moveLog.append(move) #track move
         self.whiteToMove = not self.whiteToMove #switch players
+
+    def undoMove(self):
+        if len(self.moveLog) != 0:
+            move = self.moveLog.pop() #gets last element and removes
+            self.board[move.startRow, move.startCol] = move.moved_piece #put moved piece back at start
+            self.board[move.endRow, move.endCol] = move.captured_piece #put catured piece back in place
+            self.whiteToMove = not self.whiteToMove
 
 
 

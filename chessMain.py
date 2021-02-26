@@ -54,8 +54,8 @@ def main():
             if e.type == p.QUIT:
                 running = False
         
-            # mouse event handles
-            if e.type == p.MOUSEBUTTONDOWN:
+            # mouse event handlers
+            elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos() #(x,y) coordinates of mouse
                 col = location[0] // sq_size # // double divide to get integers
                 row = location[1] // sq_size
@@ -70,6 +70,15 @@ def main():
                     gs.makeMove(move) # make move
                     selected_sq = () # reset selected player squares
                     player_clicks = []
+                
+            # key event handlers
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z: # 'z' Key to undo move
+                    gs.undoMove()
+                    selected_sq = () # reset selections
+                    player_clicks = []
+
+
 
         drawGameState(screen, gs)
         clock.tick(max_fps)
