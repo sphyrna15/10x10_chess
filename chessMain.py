@@ -42,6 +42,9 @@ def main():
     screen.fill(p.Color("white"))
 
     gs = chessEngine.GameState() #initialize game state
+    validMoves = gs.getValidMoves()
+    moveMade = False
+
     loadImages() #load images only once before while loop
 
     running = True
@@ -67,7 +70,9 @@ def main():
                     player_clicks.append(selected_sq) #append both 1st and 2nd click
                 if len(player_clicks) == 2: #2nd click
                     move = chessEngine.Move(player_clicks[0], player_clicks[1], gs.board)
-                    gs.makeMove(move) # make move
+                    if move in validMoves:
+                        gs.makeMove(move) # make move if it is valid
+                        moveMade = True
                     selected_sq = () # reset selected player squares
                     player_clicks = []
                 
@@ -77,9 +82,13 @@ def main():
                     gs.undoMove()
                     selected_sq = () # reset selections
                     player_clicks = []
+                    moveMade = True
 
+        if moveMade: #only generate new valid move list if a valid move was actually made
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
-
+        # draw game
         drawGameState(screen, gs)
         clock.tick(max_fps)
         p.display.flip()
