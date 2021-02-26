@@ -22,6 +22,10 @@ class GameState():
 
         self.moveLog = []
         self.whiteToMove = True
+        # dictionary to keep track of piece function names 
+        self.moveFunctions = {'p': self.pawnMoves, 'r': self.rookMoves, 'n': self.knightMoves, 'u': self.unicornMoves, 
+                            'b': self.bishopMoves, 'q': self.queenMoves, 'k': self.kingMoves, 'e': self.eagleMoves, 
+                            'c': self.cardinalMoves, 'h': self.hammerMoves, 'a': self.arrowMoves, 'm': self.ministerMoves}
     
     # Will not work for casteling, en passant capture and pawn promotion
     def makeMove(self, move):
@@ -52,10 +56,7 @@ class GameState():
                 turn = self.board[r,c][0] # colour of piece on square - need to check it?
                 if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r,c][1]
-                    if piece == "p":
-                        self.pawnMoves(r, c, moves)
-                    elif piece == "r":
-                        self.rookMoves(r, c, moves)
+                    self.moveFunctions[piece](r, c, moves) #calls appropriate move functions
 
         return moves
     
@@ -101,6 +102,36 @@ class GameState():
 
 
     def rookMoves(self, r, c, moves):
+        pass
+    
+    def knightMoves(self, r, c, moves):
+        pass
+
+    def bishopMoves(self, r, c, moves):
+        pass
+
+    def queenMoves(self, r, c, moves):
+        pass
+
+    def kingMoves(self, r, c, moves):
+        pass
+
+    def unicornMoves(self, r, c, moves):
+        pass
+
+    def eagleMoves(self, r, c, moves):
+        pass
+
+    def cardinalMoves(self, r, c, moves):
+        pass
+
+    def arrowMoves(self, r, c, moves):
+        pass
+
+    def hammerMoves(self, r, c, moves):
+        pass
+
+    def ministerMoves(self, r, c, moves):
         pass
     
 
