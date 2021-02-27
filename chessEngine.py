@@ -13,7 +13,7 @@ class GameState():
             ["br", "bn", "bu", "bb", "bq", "bk", "bb", "bu", "bn", "br"],
             ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "wr", "--", "--", "--", "--", "br", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
@@ -97,12 +97,69 @@ class GameState():
         
 
 
-                    
-
-
 
     def rookMoves(self, r, c, moves):
-        pass
+        """ movement to right """
+        row = r+1 #iteration variable
+        while row < 10:
+            # black rook captures white piece:
+            bcapt = (self.board[row, c][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[row, c][0] == 'b' and self.whiteToMove) 
+            if self.board[row, c] == "--": # check if empty square to move
+                moves.append(Move((r,c), (row, c), self.board))
+            elif wcapt or bcapt:
+                moves.append(Move((r,c), (row,c), self.board))
+                break
+            else: # if none of the above - one of our pieces blocks the way
+                break
+            row += 1
+        """ movement to left """
+        row = r-1 # new iteration variable
+        while row >= 0:
+            # black rook captures white piece:
+            bcapt = (self.board[row, c][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[row, c][0] == 'b' and self.whiteToMove)
+            if self.board[row, c] == "--": # check if empty square to move
+                moves.append(Move((r,c), (row, c), self.board))
+            elif wcapt or bcapt:
+                moves.append(Move((r,c), (row,c), self.board))
+                break
+            else: # if none of the above - one of our pieces blocks the way
+                break
+            row -= 1
+        """ movement down """
+        col = c+1 # interation variable
+        while col < 10:
+            # black rook captures white piece:
+            bcapt = (self.board[r, col][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[r, col][0] == 'b' and self.whiteToMove)
+            if self.board[r, col] == "--": #empty square to move to
+                moves.append(Move((r,c), (r,col), self.board))
+            elif wcapt or bcapt:
+                moves.append(Move((r,c), (r,col), self.board))
+                break
+            else:
+                break
+            col += 1
+        """ movement up """
+        col = c-1 #new iteration variable
+        while col >= 0:
+            # black rook captures white piece:
+            bcapt = (self.board[r, col][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[r, col][0] == 'b' and self.whiteToMove)
+            if self.board[r, col] == "--": #empty square to move to
+                moves.append(Move((r,c), (r,col), self.board))
+            elif wcapt or bcapt:
+                moves.append(Move((r,c), (r,col), self.board))
+                break
+            else:
+                break
+            col -= 1
+             
     
     def knightMoves(self, r, c, moves):
         pass
