@@ -182,7 +182,72 @@ class GameState():
 
 
     def bishopMoves(self, r, c, moves):
-        pass
+        """ move up to the right """
+        row = r+1 ; col = c+1 #iteration variables
+        while row in range(10) and col in range(10):
+            # black bishop captures white piece:
+            bcapt = (self.board[row, col][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[row, col][0] == 'b' and self.whiteToMove)
+            if self.board[row,col] == "--": # empty squares ok to move
+                moves.append(Move((r,c), (row,col), self.board))
+                row += 1 ; col+= 1
+                continue
+            elif bcapt or wcapt:
+                moves.append(Move((r,c), (row,col), self.board))
+                break
+            else:
+                break
+        """ move up to the left """
+        row = r+1 ; col = c-1 #iteration variables
+        while row in range(10) and col in range(10):
+            # black bishop captures white piece:
+            bcapt = (self.board[row, col][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[row, col][0] == 'b' and self.whiteToMove)
+            if self.board[row,col] == "--": # empty squares ok to move
+                moves.append(Move((r,c), (row,col), self.board))
+                row += 1 ; col-= 1
+                continue
+            elif bcapt or wcapt:
+                moves.append(Move((r,c), (row,col), self.board))
+                break
+            else:
+                break
+        """ move down to the right """
+        row = r-1 ; col = c+1 #iteration variables
+        while row in range(10) and col in range(10):
+            # black bishop captures white piece:
+            bcapt = (self.board[row, col][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[row, col][0] == 'b' and self.whiteToMove)
+            if self.board[row,col] == "--": # empty squares ok to move
+                moves.append(Move((r,c), (row,col), self.board))
+                row -= 1 ; col += 1
+                continue
+            elif bcapt or wcapt:
+                moves.append(Move((r,c), (row,col), self.board))
+                break
+            else:
+                break
+        """ move down to the left """
+        row = r-1 ; col = c-1 #iteration variables
+        while row in range(10) and col in range(10):
+            # black bishop captures white piece:
+            bcapt = (self.board[row, col][0] == 'w' and not self.whiteToMove)
+            # white rook captures black piece:
+            wcapt = (self.board[row, col][0] == 'b' and self.whiteToMove)
+            if self.board[row,col] == "--": # empty squares ok to move
+                moves.append(Move((r,c), (row,col), self.board))
+                row -= 1 ; col -= 1
+                continue
+            elif bcapt or wcapt:
+                moves.append(Move((r,c), (row,col), self.board))
+                break
+            else:
+                break
+
+
 
     def queenMoves(self, r, c, moves):
         # queen moves like a bishop + rook:
