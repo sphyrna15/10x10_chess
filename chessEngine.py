@@ -13,7 +13,7 @@ class GameState():
             ["br", "bn", "bu", "bb", "bq", "bk", "bb", "bu", "bn", "br"],
             ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "wr", "--", "--", "--", "--", "br", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
@@ -56,7 +56,7 @@ class GameState():
                 turn = self.board[r,c][0] # colour of piece on square - need to check it?
                 if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r,c][1]
-                    self.moveFunctions[piece](r, c, moves) #calls appropriate move functions
+                    self.moveFunctions[piece](r, c, moves) #calls appropriate move functions current pos
 
         return moves
     
@@ -100,7 +100,7 @@ class GameState():
 
     def rookMoves(self, r, c, moves):
         """ movement to right """
-        row = r+1 #iteration variable
+        row = r + 1 #iteration variable
         while row < 10:
             # black rook captures white piece:
             bcapt = (self.board[row, c][0] == 'w' and not self.whiteToMove)
@@ -115,7 +115,7 @@ class GameState():
                 break
             row += 1
         """ movement to left """
-        row = r-1 # new iteration variable
+        row = r - 1 # new iteration variable
         while row >= 0:
             # black rook captures white piece:
             bcapt = (self.board[row, c][0] == 'w' and not self.whiteToMove)
@@ -130,7 +130,7 @@ class GameState():
                 break
             row -= 1
         """ movement down """
-        col = c+1 # interation variable
+        col = c + 1 # interation variable
         while col < 10:
             # black rook captures white piece:
             bcapt = (self.board[r, col][0] == 'w' and not self.whiteToMove)
@@ -145,7 +145,7 @@ class GameState():
                 break
             col += 1
         """ movement up """
-        col = c-1 #new iteration variable
+        col = c - 1 #new iteration variable
         while col >= 0:
             # black rook captures white piece:
             bcapt = (self.board[r, col][0] == 'w' and not self.whiteToMove)
@@ -162,7 +162,27 @@ class GameState():
              
     
     def knightMoves(self, r, c, moves):
-        pass
+        # list possible locations for knight to jump to - reach:
+        reach = [(r+2, c-1), (r+2, c+1), (r-2, c-1), (r-2, c+1), 
+                (r+1, c+2), (r-1, c+2), (r+1, c-2), (r-1, c-2)]
+        for square in reach:
+            if square[0] in range(10) and square[1] in range(10):
+                # white knight
+                if self.whiteToMove:
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                # black knight
+                else:
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+
+
+        
+
 
     def bishopMoves(self, r, c, moves):
         pass
@@ -174,7 +194,26 @@ class GameState():
         pass
 
     def unicornMoves(self, r, c, moves):
-        pass
+        # can do all knight moves plus extra:
+        self.knightMoves(r, c, moves)
+
+        #extra moves:
+        extras = [(r+3, c), (r-3, c), (r, c+3), (r, c-3)]
+        for square in extras:
+            if square[0] in range(10) and square[1] in range(10):
+                # white unicorn
+                if self.whiteToMove:
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                # black unicorn
+                else:
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+
 
     def eagleMoves(self, r, c, moves):
         pass
