@@ -181,17 +181,33 @@ class GameState():
                         moves.append(Move((r,c), square, self.board))
 
 
-        
-
-
     def bishopMoves(self, r, c, moves):
         pass
 
     def queenMoves(self, r, c, moves):
-        pass
+        # queen moves like a bishop + rook:
+        self.bishopMoves(r, c, moves)
+        self.rookMoves(r, c, moves)
 
     def kingMoves(self, r, c, moves):
-        pass
+        # list with square the king can reach
+        reach = [(r+1, c), (r+1,c+1), (r+1,c-1), (r,c+1), (r,c-1),
+                (r-1,c), (r-1,c+1), (r-1,c-1)]
+        for square in reach:
+            if square[0] in range(10) and square[1] in range(10):
+                # white unicorn
+                if self.whiteToMove:
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                # black unicorn
+                else:
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+        
 
     def unicornMoves(self, r, c, moves):
         # can do all knight moves plus extra:
@@ -216,7 +232,26 @@ class GameState():
 
 
     def eagleMoves(self, r, c, moves):
-        pass
+        # define reach of eagle - move 3 forward + 1 or 2 sideways
+        reach = [(r+3, c+1), (r+3, c-1), (r+3, c+2), (r+3, c-2), #up
+                (r-3, c+1), (r-3, c-1), (r-3, c+2), (r-3, c-2),  #down
+                (r+1, c+3), (r-1, c+3), (r+2, c+3), (r-2, c+3),  #right
+                (r+1, c-3), (r-1, c-3), (r+2, c-3), (r-2, c-3)]  #left
+        # same logic as for king, knight and unicorn
+        for square in reach:
+            if square[0] in range(10) and square[1] in range(10):
+                # white unicorn
+                if self.whiteToMove:
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'w':
+                        moves.append(Move((r,c), square, self.board))
+                # black unicorn
+                else:
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
+                    if self.board[square][0] != 'b':
+                        moves.append(Move((r,c), square, self.board))
 
     def cardinalMoves(self, r, c, moves):
         pass
