@@ -73,6 +73,7 @@ def main():
                     if move in validMoves:
                         gs.makeMove(move) # make move if it is valid
                         moveMade = True
+                        print("White to Move? - " + str(gs.whiteToMove))
                     selected_sq = () # reset selected player squares
                     player_clicks = []
                 
