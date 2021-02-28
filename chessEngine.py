@@ -318,16 +318,106 @@ class GameState():
                     if self.board[square][0] != 'b':
                         moves.append(Move((r,c), square, self.board))
 
+    """ cardinal and minister movement search function """
+    def movingSearch(self, r, c, moves, updateIdx):
+        row, col = updateIdx(r,c) # function that decides movement (index updates)
+        skipped = False
+        while row in range(10) and col in range(10):
+            wskip = self.board[row,col][0] == 'w' and self.whiteToMove # white piece to skip
+            bskip = self.board[row,col][0] == 'b' and not self.whiteToMove # black piece to skip
+            if self.board[row, col] == "--":
+                moves.append(Move((r,c), (row,col), self.board))
+                row, col = updateIdx(row, col)
+            elif (wskip or bskip) and not skipped: #piece possible to be skipped in the way
+                row, col = updateIdx(row, col) #skip piece
+                skipped = True # allow only one piece to be skipped
+            else:
+                break
+    
+    """ cardinal and minister capturing move search functions """
+    def capturingSearch(self, r, c, moves, updateIdx):
+        row, col = updateIdx(r,c)
+        while row in range(10) and col in range(10):
+            wcapt = self.board[row,col][0] == 'b' and self.whiteToMove #white capturing black
+            bcapt = self.board[row,col][0] == 'w' and not self.whiteToMove
+            if self.board[row,col] == "--":
+                row, col = updateIdx(row, col) #just skip empty pieces
+            elif wcapt or bcapt: #capture possible
+                moves.append(Move((r,c), (row,col), self.board))
+                row, col = updateIdx(row,col)
+                break
+            else: #one of our own blocks the way
+                break
+    
+
     def cardinalMoves(self, r, c, moves):
-        pass
+        # moves like a bishop, captrues like a rook
+        # can skip one of its own pieces while moving
+        """ moving """
+        # up right
+        updateIdx = lambda r, c : (r+1, c+1)
+        self.movingSearch(r, c, moves, updateIdx)
+        # up left
+        updateIdx = lambda r, c : (r+1, c-1)
+        self.movingSearch(r, c, moves, updateIdx)  
+        # down right
+        updateIdx = lambda r, c : (r-1, c+1)
+        self.movingSearch(r, c, moves, updateIdx) 
+        # down left
+        updateIdx = lambda r, c : (r-1, c-1)
+        self.movingSearch(r, c, moves, updateIdx)
+        """ capturing """
+        # capture up
+        updateIdx = lambda r, c : (r+1, c)
+        self.capturingSearch(r, c, moves, updateIdx)
+        # capture down
+        updateIdx = lambda r, c : (r-1, c)
+        self.capturingSearch(r, c, moves, updateIdx)
+        # capture left
+        updateIdx = lambda r, c : (r, c-1)
+        self.capturingSearch(r, c, moves, updateIdx)
+        # capture right
+        updateIdx = lambda r, c : (r, c+1)
+        self.capturingSearch(r, c, moves, updateIdx)
+    
+
+    def ministerMoves(self, r, c, moves):
+        # moves like a rook, captures like a bishop
+        # can skip one of its own pieces while moving
+        """ moving """
+        # up
+        updateIdx = lambda r, c : (r+1, c)
+        self.movingSearch(r, c, moves, updateIdx)
+        # down
+        updateIdx = lambda r, c : (r-1, c)
+        self.movingSearch(r, c, moves, updateIdx)  
+        # right
+        updateIdx = lambda r, c : (r, c+1)
+        self.movingSearch(r, c, moves, updateIdx) 
+        # left
+        updateIdx = lambda r, c : (r, c-1)
+        self.movingSearch(r, c, moves, updateIdx)
+        """ capturing """
+        # capture up right
+        updateIdx = lambda r, c : (r+1, c+1)
+        self.capturingSearch(r, c, moves, updateIdx)
+        # capture down right
+        updateIdx = lambda r, c : (r-1, c+1)
+        self.capturingSearch(r, c, moves, updateIdx)
+        # capture up left
+        updateIdx = lambda r, c : (r+1, c-1)
+        self.capturingSearch(r, c, moves, updateIdx)
+        # capture down left
+        updateIdx = lambda r, c : (r-1, c-1)
+        self.capturingSearch(r, c, moves, updateIdx)
+        
+
+
 
     def arrowMoves(self, r, c, moves):
         pass
 
     def hammerMoves(self, r, c, moves):
-        pass
-
-    def ministerMoves(self, r, c, moves):
         pass
     
 
