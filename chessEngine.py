@@ -159,26 +159,30 @@ class GameState():
             else:
                 break
             col -= 1
-             
     
-    def knightMoves(self, r, c, moves):
-        # list possible locations for knight to jump to - reach:
-        reach = [(r+2, c-1), (r+2, c+1), (r-2, c-1), (r-2, c+1), 
-                (r+1, c+2), (r-1, c+2), (r+1, c-2), (r-1, c-2)]
-        for square in reach:
+    """ function to find possible moves from move reach list (for knights etc.) """
+    def moveListSeach(self, r, c, moves, moveList):
+        for square in moveList:
             if square[0] in range(10) and square[1] in range(10):
-                # white knight
+                # white piece
                 if self.whiteToMove:
                     if self.board[square][0] != 'w':
                         moves.append(Move((r,c), square, self.board))
                     if self.board[square][0] != 'w':
                         moves.append(Move((r,c), square, self.board))
-                # black knight
+                # black piece
                 else:
                     if self.board[square][0] != 'b':
                         moves.append(Move((r,c), square, self.board))
                     if self.board[square][0] != 'b':
                         moves.append(Move((r,c), square, self.board))
+
+    
+    def knightMoves(self, r, c, moves):
+        # list possible locations for knight to jump to - reach:
+        reach = [(r+2, c-1), (r+2, c+1), (r-2, c-1), (r-2, c+1), 
+                (r+1, c+2), (r-1, c+2), (r+1, c-2), (r-1, c-2)]
+        self.moveListSeach(r, c, moves, reach)
 
 
     def bishopMoves(self, r, c, moves):
@@ -258,20 +262,7 @@ class GameState():
         # list with square the king can reach
         reach = [(r+1, c), (r+1,c+1), (r+1,c-1), (r,c+1), (r,c-1),
                 (r-1,c), (r-1,c+1), (r-1,c-1)]
-        for square in reach:
-            if square[0] in range(10) and square[1] in range(10):
-                # white unicorn
-                if self.whiteToMove:
-                    if self.board[square][0] != 'w':
-                        moves.append(Move((r,c), square, self.board))
-                    if self.board[square][0] != 'w':
-                        moves.append(Move((r,c), square, self.board))
-                # black unicorn
-                else:
-                    if self.board[square][0] != 'b':
-                        moves.append(Move((r,c), square, self.board))
-                    if self.board[square][0] != 'b':
-                        moves.append(Move((r,c), square, self.board))
+        self.moveListSeach(r, c, moves, reach)
         
 
     def unicornMoves(self, r, c, moves):
@@ -280,20 +271,7 @@ class GameState():
 
         #extra moves:
         extras = [(r+3, c), (r-3, c), (r, c+3), (r, c-3)]
-        for square in extras:
-            if square[0] in range(10) and square[1] in range(10):
-                # white unicorn
-                if self.whiteToMove:
-                    if self.board[square][0] != 'w':
-                        moves.append(Move((r,c), square, self.board))
-                    if self.board[square][0] != 'w':
-                        moves.append(Move((r,c), square, self.board))
-                # black unicorn
-                else:
-                    if self.board[square][0] != 'b':
-                        moves.append(Move((r,c), square, self.board))
-                    if self.board[square][0] != 'b':
-                        moves.append(Move((r,c), square, self.board))
+        self.moveListSeach(r, c, moves, extras)
 
 
     def eagleMoves(self, r, c, moves):
@@ -303,20 +281,7 @@ class GameState():
                 (r+1, c+3), (r-1, c+3), (r+2, c+3), (r-2, c+3),  #right
                 (r+1, c-3), (r-1, c-3), (r+2, c-3), (r-2, c-3)]  #left
         # same logic as for king, knight and unicorn
-        for square in reach:
-            if square[0] in range(10) and square[1] in range(10):
-                # white unicorn
-                if self.whiteToMove:
-                    if self.board[square][0] != 'w':
-                        moves.append(Move((r,c), square, self.board))
-                    if self.board[square][0] != 'w':
-                        moves.append(Move((r,c), square, self.board))
-                # black unicorn
-                else:
-                    if self.board[square][0] != 'b':
-                        moves.append(Move((r,c), square, self.board))
-                    if self.board[square][0] != 'b':
-                        moves.append(Move((r,c), square, self.board))
+        self.moveListSeach(r, c, moves, reach)
 
     """ cardinal and minister movement search function """
     def movingSearch(self, r, c, moves, updateIdx):
@@ -411,8 +376,6 @@ class GameState():
         updateIdx = lambda r, c : (r-1, c-1)
         self.capturingSearch(r, c, moves, updateIdx)
         
-
-
 
     def arrowMoves(self, r, c, moves):
         pass
