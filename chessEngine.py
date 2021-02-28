@@ -13,8 +13,8 @@ class GameState():
             ["br", "bn", "bu", "bb", "bq", "bk", "bb", "bu", "bn", "br"],
             ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "wh", "--", "--", "--"],
+            ["--", "--", "bh", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wr", "wn", "wu", "wb", "wq", "wk", "wb", "wu", "wn", "wr"],
@@ -467,7 +467,87 @@ class GameState():
     
 
     def hammerMoves(self, r, c, moves):
-        pass
+        # the hammer moves like a rook and can capture on all rows and collums
+        # adjacent to its direction of travel
+        """ moving / capturing down """
+        row = r+1 ; col = c
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row,col), self.board))
+                # check where we can continue to look:
+                if col-1 in range(10):
+                    wcaptleft = (self.board[row,col-1][0] == 'b') and self.whiteToMove #white captures left
+                    bcaptleft = (self.board[row,col-1][0] == 'w') and not self.whiteToMove #black captures left
+                    if wcaptleft or bcaptleft:
+                        moves.append(Move((r,c), (row,col-1), self.board))
+                if col+1 in range(10):
+                    wcaptright = (self.board[row,col+1][0] == 'b') and self.whiteToMove #white captures right
+                    bcaptright = (self.board[row,col+1][0] == 'w') and not self.whiteToMove #black captures right
+                    if wcaptright or bcaptright:
+                        moves.append(Move((r,c), (row,col+1), self.board))
+                row += 1
+            else: # cannot move further
+                break
+        """ moving / capturing up """
+        row = r-1 ; col = c
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row,col), self.board))
+                # check where we can continue to look:
+                if col-1 in range(10):
+                    wcaptleft = (self.board[row,col-1][0] == 'b') and self.whiteToMove #white captures left
+                    bcaptleft = (self.board[row,col-1][0] == 'w') and not self.whiteToMove #black captures left
+                    if wcaptleft or bcaptleft:
+                        moves.append(Move((r,c), (row,col-1), self.board))
+                if col+1 in range(10):
+                    wcaptright = (self.board[row,col+1][0] == 'b') and self.whiteToMove #white captures right
+                    bcaptright = (self.board[row,col+1][0] == 'w') and not self.whiteToMove #black captures right
+                    if wcaptright or bcaptright:
+                        moves.append(Move((r,c), (row,col+1), self.board))
+                row -= 1
+            else: # cannot move further
+                break
+        """ moving / capturing to the right """
+        row = r ; col = c+1
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row,col), self.board))
+                # check where we can continue to look
+                if row-1 in range(10):
+                    wcaptup = (self.board[row-1,col][0] == 'b') and self.whiteToMove #white captures up
+                    bcaptup = (self.board[row-1,col][0] == 'w') and not self.whiteToMove #black captures up
+                    if wcaptup or bcaptup:
+                        moves.append(Move((r,c), (row-1,col), self.board))
+                if row+1 in range(10):
+                    wcaptup = (self.board[row+1,col][0] == 'b') and self.whiteToMove #white captures up
+                    bcaptup = (self.board[row+1,col][0] == 'w') and not self.whiteToMove #black captures up
+                    if wcaptup or bcaptup:
+                        moves.append(Move((r,c), (row+1,col), self.board))
+                col += 1
+            else: # cannot move further
+                break
+        """ moving / capturing to the left """
+        row = r ; col = c-1
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row,col), self.board))
+                # check where we can continue to look
+                if row-1 in range(10):
+                    wcaptup = (self.board[row-1,col][0] == 'b') and self.whiteToMove #white captures up
+                    bcaptup = (self.board[row-1,col][0] == 'w') and not self.whiteToMove #black captures up
+                    if wcaptup or bcaptup:
+                        moves.append(Move((r,c), (row-1,col), self.board))
+                if row+1 in range(10):
+                    wcaptup = (self.board[row+1,col][0] == 'b') and self.whiteToMove #white captures up
+                    bcaptup = (self.board[row+1,col][0] == 'w') and not self.whiteToMove #black captures up
+                    if wcaptup or bcaptup:
+                        moves.append(Move((r,c), (row+1,col), self.board))
+                col -= 1
+            else: # cannot move further
+                break
+                
+
+
     
 
 
