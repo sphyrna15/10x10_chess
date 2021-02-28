@@ -99,7 +99,7 @@ class GameState():
 
 
     def rookMoves(self, r, c, moves):
-        """ movement to right """
+        """ movement down """
         row = r + 1 #iteration variable
         while row < 10:
             # black rook captures white piece:
@@ -114,7 +114,7 @@ class GameState():
             else: # if none of the above - one of our pieces blocks the way
                 break
             row += 1
-        """ movement to left """
+        """ movement up """
         row = r - 1 # new iteration variable
         while row >= 0:
             # black rook captures white piece:
@@ -129,7 +129,7 @@ class GameState():
             else: # if none of the above - one of our pieces blocks the way
                 break
             row -= 1
-        """ movement down """
+        """ movement to the right """
         col = c + 1 # interation variable
         while col < 10:
             # black rook captures white piece:
@@ -144,7 +144,7 @@ class GameState():
             else:
                 break
             col += 1
-        """ movement up """
+        """ movement to the left """
         col = c - 1 #new iteration variable
         while col >= 0:
             # black rook captures white piece:
@@ -319,20 +319,20 @@ class GameState():
         # moves like a bishop, captrues like a rook
         # can skip one of its own pieces while moving
         """ moving """
-        # up right
+        # down right
         updateIdx = lambda r, c : (r+1, c+1)
         self.movingSearch(r, c, moves, updateIdx)
-        # up left
+        # down left
         updateIdx = lambda r, c : (r+1, c-1)
         self.movingSearch(r, c, moves, updateIdx)  
-        # down right
+        # up right
         updateIdx = lambda r, c : (r-1, c+1)
         self.movingSearch(r, c, moves, updateIdx) 
-        # down left
+        # up left
         updateIdx = lambda r, c : (r-1, c-1)
         self.movingSearch(r, c, moves, updateIdx)
         """ capturing """
-        # capture up
+        # capture down
         updateIdx = lambda r, c : (r+1, c)
         self.capturingSearch(r, c, moves, updateIdx)
         # capture down
@@ -363,22 +363,108 @@ class GameState():
         updateIdx = lambda r, c : (r, c-1)
         self.movingSearch(r, c, moves, updateIdx)
         """ capturing """
-        # capture up right
+        # capture down right
         updateIdx = lambda r, c : (r+1, c+1)
         self.capturingSearch(r, c, moves, updateIdx)
-        # capture down right
+        # capture up right
         updateIdx = lambda r, c : (r-1, c+1)
         self.capturingSearch(r, c, moves, updateIdx)
-        # capture up left
+        # capture down left
         updateIdx = lambda r, c : (r+1, c-1)
         self.capturingSearch(r, c, moves, updateIdx)
-        # capture down left
+        # capture up left
         updateIdx = lambda r, c : (r-1, c-1)
         self.capturingSearch(r, c, moves, updateIdx)
         
 
     def arrowMoves(self, r, c, moves):
-        pass
+        # arrows move like a bishop and can capture all pieces
+        # on adjacent diagonals to the movement direction
+        """ moving / capturing down right """
+        row = r+1 ; col = c+1
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row, col), self.board))
+                # check where we can continue to look
+                if row+1 in range(10):
+                    # determine where white and black can capture
+                    wcaptdown = (self.board[row+1,col][0] == 'b') and self.whiteToMove #capture on lower diag
+                    bcaptdown = (self.board[row+1,col][0] == 'w') and not self.whiteToMove #black captures diag down
+                    if wcaptdown or bcaptdown: #captures on lower diagonal possible
+                        moves.append(Move((r,c), (row+1, col), self.board))
+                if col+1 in range(10):
+                    # determine where white and black can capture
+                    wcaptup = (self.board[row,col+1][0] == 'b') and self.whiteToMove #capture on higher diag
+                    bcaptup = (self.board[row,col+1][0] == 'w') and not self.whiteToMove #black captures diag up
+                    if wcaptup or bcaptup:
+                        moves.append(Move((r,c), (row,col+1), self.board))
+                row += 1 ; col += 1 #update index
+            else: # cannot move to that square - thus also not capture
+                break
+        """ moving / capturing down left """
+        row = r+1 ; col = c-1
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row, col), self.board))
+                # check where we can continue to look
+                if row+1 in range(10):
+                    # determine where white and black can capture
+                    wcaptdown = (self.board[row+1,col][0] == 'b') and self.whiteToMove #capture on lower diag
+                    bcaptdown = (self.board[row+1,col][0] == 'w') and not self.whiteToMove #black captures diag down
+                    if wcaptdown or bcaptdown: #captures on lower diagonal possible
+                        moves.append(Move((r,c), (row+1, col), self.board))
+                if col-1 in range(10):
+                    # determine where white and black can capture
+                    wcaptup = (self.board[row,col-1][0] == 'b') and self.whiteToMove #capture on higher diag
+                    bcaptup = (self.board[row,col-1][0] == 'w') and not self.whiteToMove #black captures diag up
+                    if wcaptup or bcaptup:
+                        moves.append(Move((r,c), (row,col-1), self.board))
+                row += 1 ; col -= 1 #update index
+            else: # cannot move to that square - thus also not capture
+                break
+        """ moving / capturing up right """
+        row = r-1 ; col = c+1
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row, col), self.board))
+                # check where we can continue to look
+                if r-1 in range(10):
+                    # determine where white and black can capture
+                    wcaptup = (self.board[row-1,col][0] == 'b') and self.whiteToMove #capture on higher diag
+                    bcaptup = (self.board[row-1,col][0] == 'w') and not self.whiteToMove #black captures diag up
+                    if wcaptup or bcaptup: #captures on upper diagonal possible
+                        moves.append(Move((r,c), (row-1, col), self.board))
+                if col+1 in range(10):
+                    # determine where white and black can capture
+                    wcaptdown = (self.board[row,col+1][0] == 'b') and self.whiteToMove #capture on lower diag
+                    bcaptdown = (self.board[row,col+1][0] == 'w') and not self.whiteToMove #black captures diag down
+                    if wcaptdown or bcaptdown:
+                        moves.append(Move((r,c), (row,col+1), self.board))
+                row -= 1 ; col += 1 #update index
+            else: # cannot move to that square - thus also not capture
+                break
+        """ moving / capturing up left """
+        row = r-1 ; col = c-1
+        while row in range(10) and col in range(10):
+            if self.board[row,col] == "--":
+                moves.append(Move((r,c), (row, col), self.board))
+                # check where we can continue to look
+                if r-1 in range(10):
+                    # determine where white and black can capture
+                    wcaptup = (self.board[row-1,col][0] == 'b') and self.whiteToMove #capture on higher diag
+                    bcaptup = (self.board[row-1,col][0] == 'w') and not self.whiteToMove #black captures diag up
+                    if wcaptup or bcaptup: #captures on upper diagonal possible
+                        moves.append(Move((r,c), (row-1, col), self.board))
+                if col-1 in range(10):
+                    # determine where white and black can capture
+                    wcaptdown = (self.board[row,col-1][0] == 'b') and self.whiteToMove #capture on lower diag
+                    bcaptdown = (self.board[row,col-1][0] == 'w') and not self.whiteToMove #black captures diag down
+                    if wcaptdown or bcaptdown:
+                        moves.append(Move((r,c), (row,col-1), self.board))
+                row -= 1 ; col -= 1 #update index
+            else: # cannot move to that square - thus also not capture
+                break
+    
 
     def hammerMoves(self, r, c, moves):
         pass
