@@ -70,12 +70,16 @@ def main():
                     player_clicks.append(selected_sq) #append both 1st and 2nd click
                 if len(player_clicks) == 2: #2nd click
                     move = chessEngine.Move(player_clicks[0], player_clicks[1], gs.board)
-                    if move in validMoves:
-                        gs.makeMove(move) # make move if it is valid
-                        moveMade = True
-                        print("White to Move? - " + str(gs.whiteToMove))
-                    selected_sq = () # reset selected player squares
-                    player_clicks = []
+                    for i in range(len(validMoves)):
+                        if move == validMoves[i]:
+                            gs.makeMove(move) # make move if it is valid
+                            moveMade = True
+                            print("White to Move? - " + str(gs.whiteToMove))
+                            selected_sq = () # reset selected player squares
+                            player_clicks = []
+                            break
+                    if not moveMade:
+                        player_clicks = [selected_sq]
                 
             # key event handlers
             elif e.type == p.KEYDOWN:
@@ -109,7 +113,7 @@ def drawGameState(screen, gs):
 def drawBoard(screen):
     # dark squares have odd parity, light suqares have even parity
     # thus r + c mod 2 will tell us the color of the square
-    colors = [p.Color("white"), p.Color("brown")]
+    colors = [p.Color("white"), p.Color("grey")]
     for r in range(dimension):
         for c in range(dimension):
             color = colors[((r+c) % 2)]
