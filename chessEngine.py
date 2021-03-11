@@ -42,6 +42,9 @@ class GameState():
             self.whiteKingLocation = (move.endRow, move.endCol)
         if move.moved_piece == 'bk':
             self.blackKingLocation = (move.endRow, move.endCol)
+        #pawn promotion
+        if move.isPawnPromotion:
+            self.board[move.endRow, move.endCol] = move.moved_piece[0] + 'q'
 
     def undoMove(self):
         if len(self.moveLog) != 0:
@@ -608,6 +611,9 @@ class Move(): # handles squares to execute moves and keeps track of them
         self.endCol = end_sq[1]
         self.moved_piece = board[self.startRow, self.startCol]
         self.captured_piece = board[self.endRow, self.endCol]
+        self.isPawnPromotion = False # is this move a pawn promotion?
+        if (self.moved_piece == 'wp' and self.endRow == 0) or (self.moved_piece == 'bp' and self.endRow == 9):
+            self.isPawnPromotion = True
         #HASH function to create unique ID for each move
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
  
