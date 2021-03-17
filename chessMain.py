@@ -72,7 +72,7 @@ def main():
                     move = chessEngine.Move(player_clicks[0], player_clicks[1], gs.board)
                     for i in range(len(validMoves)):
                         if move == validMoves[i]:
-                            gs.makeMove(move) # make move if it is valid
+                            gs.makeMove(validMoves[i]) # make move if it is valid
                             moveMade = True
                             print("White to Move? - " + str(gs.whiteToMove))
                             selected_sq = () # reset selected player squares
