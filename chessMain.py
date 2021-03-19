@@ -96,7 +96,7 @@ def main():
                     gameOver = False
                 if e.key == p.K_r: # resets the board with 'r' Key
                     gs = chessEngine.GameState()
-                    validMoves = gs.getValidMoves
+                    validMoves = gs.getValidMoves()
                     selected_sq = ()
                     player_clicks = []
                     moveMade = False
