@@ -117,7 +117,7 @@ def main():
             if not gs.whiteToMove:
                 drawText(screen, "White wins by Checkmate!")
             else:
-                drawText(scree, "Balck wins by Checkmate!")
+                drawText(screen, "Balck wins by Checkmate!")
         if gs.isStaleMate:
             gameOver = True
             drawText(screen, "Stalemate!")
